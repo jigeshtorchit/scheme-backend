@@ -29,11 +29,6 @@ if (db.readyState !== 1) {
     }
   });
 
-  // Additional code for registration endpoint
-  app.post('/admin/register', async (req, res) => {
-    // ... (same as before)
-  });
-
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
