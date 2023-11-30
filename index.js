@@ -3,12 +3,17 @@ const bcrypt = require('bcrypt');
 const User = require('./models/user');
 const authRoutes = require('./routes/authRoutes');
 const db = require('./config/db');
+const cors = require('cors');
+const corsOption=require("./cors/cors")
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
+app.use(express.static('public'));
 app.use(express.json());
 app.use('/admin', authRoutes);
+// app.use(cors());
+app.use(cors(corsOption)); 
 
 // Check if the connection is not already open before initializing
 if (db.readyState !== 1) {

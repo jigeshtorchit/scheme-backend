@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
+const path = require('path')
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -11,11 +12,19 @@ const login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    res.json({ message: 'Login successful!' });
+    // res.json({ message: 'Login successful!' });
+    res.redirect('/admin/scheme');
   } catch (error) {
     console.error('Error during login:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
-module.exports = {  login };
+const showScheme = (req, res) => {
+  // Render or send the HTML page for the scheme
+  const schemePath = path.resolve(__dirname, '../models/scheme.html');
+  res.sendFile(schemePath);
+};
+
+
+module.exports = {  login, showScheme };
