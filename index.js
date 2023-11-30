@@ -8,7 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use('/auth', authRoutes);
+app.use('/admin', authRoutes);
 
 // Check if the connection is not already open before initializing
 if (db.readyState !== 1) {
@@ -30,7 +30,7 @@ if (db.readyState !== 1) {
   });
 
   // Additional code for registration endpoint
-  app.post('/auth/register', async (req, res) => {
+  app.post('/admin/register', async (req, res) => {
     // ... (same as before)
   });
 
