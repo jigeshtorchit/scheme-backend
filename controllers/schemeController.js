@@ -42,10 +42,6 @@ exports.schemeAdd = async (req, res) => {
             return res.status(400).send(validationErrors);
         }
 
-        const existingScheme = await Scheme.findOne({ emailAddress });
-        if (existingScheme) {
-            return res.status(400).send("Scheme with this email address already exists");
-        }
 
         const newScheme = new Scheme({
             niProvider,
@@ -73,7 +69,7 @@ exports.schemeAdd = async (req, res) => {
     }
 };
 
-exports.schemeEdit = (async (req, res) => {
+exports.schemeEdit = async (req, res) => {
     try {
         const schemeEditing = await Scheme.findByIdAndUpdate(req.params.id, req.body, { new: true });
 
@@ -86,7 +82,7 @@ exports.schemeEdit = (async (req, res) => {
         console.error(err);
         res.status(401).send(err);
     }
-});
+};
 
 exports.schemeView = async (req, res) => {
     const perPage = 10;
@@ -116,40 +112,15 @@ exports.schemeView = async (req, res) => {
     }
 };
 
-exports.schemeSearch = (async (req, res) => {
+exports.schemeDelete = async (req, res) => {
     try {
-        const page = parseInt(req.query.page) || 1; // Parse the page query parameter or default to 1
-        const perPage = 10; // Set the number of items per page
-
-        // Use the 'key' route parameter for searching
-        const key = req.params.key;
-
-        // Construct a query to search for records containing the 'key'
-        const query = {
-            $or: [
-                { First_Name: { $regex: key, $options: "i" } },
-
-                { last_Name: { $regex: key, $options: "i" } },
-                { User_Name: { $regex: key, $options: "i" } },
-                { Departement: { $regex: key, $options: "i" } },
-                { Email: { $regex: key, $options: "i" } },
-                { Emaployee_ID: { $regex: key, $options: "i" } },
-                // { Mobile_No: isNaN(numericKey) ? { $regex: key, $options: "i" } : numericKey },
-            ]
-        };
-
-        // Perform the search with pagination
-        const users = await allemployee
-            .find(query)
-            .sort({ key: 1 })
-            .skip((page - 1) * perPage)
-            .limit(perPage);
-        if (users && users.length > 0) {
-            res.status(200).send(users);
-        } else {
-            res.status(400).send("No Users");
+        const schemeDeleting = await Scheme.findByIdAndDelete(req.params.id);
+        if (!schemeDeleting) {
+            return res.status(404).send("No Data");
         }
-    } catch (err) {
-        res.status(500).send(err); // Return a structured error response
+        return res.status(200).send("Scheme details are Deleted");
+    } catch (error) {
+        console.error(error);
+        res.status(401).send(error);
     }
-});
+};
