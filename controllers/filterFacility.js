@@ -7,14 +7,14 @@ async function filterFacilities(req, res) {
 
         // Build the filter object based on provided parameters
         const filter = {
-            implementedBy: implementedBy || { $exists: true },
-            percentageOfDisability: percentageOfDisability || { $exists: true },
-            'age.minAge': minAge || { $exists: true },
-            'age.maxAge': maxAge || { $exists: true },
-            incomeLimit: incomeLimit || { $exists: true },
-            genderEligibility: genderEligibility || { $exists: true },
-            // Add other fields as needed
-        };
+            implementedBy: implementedBy ? { $regex: new RegExp(implementedBy, 'i') } : { $exists: true },
+            percentageOfDisability: percentageOfDisability ? parseFloat(percentageOfDisability) : { $exists: true },
+            'age.minAge': minAge ? parseFloat(minAge) : { $exists: true },
+            'age.maxAge': maxAge ? parseFloat(maxAge) : { $exists: true },
+            incomeLimit: incomeLimit ? parseFloat(incomeLimit) : { $exists: true },
+            genderEligibility: genderEligibility ? { $regex: new RegExp(genderEligibility, 'i') } : { $exists: true },
+          };
+          
 
         // Find facilities based on the filter
         const filteredFacilities = await Facility.find(filter);
