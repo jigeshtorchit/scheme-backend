@@ -8,8 +8,7 @@ const facilitySchema = new mongoose.Schema({
     maxAge: Number,
   },
   incomeLimit: Number,
-  genderEligibility: String,
-  // Add other fields as needed
+  genderEligibility: String
 });
 
 const Facility = mongoose.model('Facility', facilitySchema);

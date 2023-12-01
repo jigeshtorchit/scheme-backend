@@ -1,5 +1,5 @@
 const corsOptions = {
-  origin: "https://schemes-six.vercel.app",
+  origin: "*",
   methods: 'GET,POST,PATCH,DELETE',
   allowedHeaders: 'Content-Type,Authorization',
 };
