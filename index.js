@@ -13,7 +13,7 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use('/admin', authRoutes);
 app.use('/scheme', schemeRoutes);
-// app.use(cors());
+app.use(cors());
 app.use(cors(corsOption)); 
 
 // Check if the connection is not already open before initializing
