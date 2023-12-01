@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const path = require('path')
+const path = require('path');
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -12,18 +13,14 @@ const login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    res.status(200).send('Login successful!');
+    // Generate JWT token
+    const token = jwt.sign({ userId: user._id, email: user.email }, 'your-secret-key', { expiresIn: '1h' });
+
+    res.status(200).send({ message: 'Login successful!', token, email, firstname: user.firstname, lastname: user.lastname });
   } catch (error) {
     console.error('Error during login:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
-const showScheme = (req, res) => {
-  // Render or send the HTML page for the scheme
-  const schemePath = path.resolve(__dirname, '../models/scheme.html');
-  res.sendFile(schemePath);
-};
-
-
-module.exports = {  login, showScheme };
+module.exports = { login };
