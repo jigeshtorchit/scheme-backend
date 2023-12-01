@@ -1,4 +1,4 @@
-const Facility = require('../models/facilityModel');
+const scheme = require('../models/scheme');
 
 const extractNumericValue = (percentage) => {
     if (percentage) {
@@ -19,26 +19,24 @@ async function filterFacilities(req, res) {
             genderEligibility
         } = req.body;
 
-        const percentageNumeric = extractNumericValue(percentageOfDisability);
-        // Log the data in the collection
-        const allFacilities = await Facility.find({});
-        console.log('All Facilities:', allFacilities);
-
-
         const filter = {
-            implementedBy: { $regex: new RegExp(implementedBy, 'i') },
-            percentageOfDisability: percentageNumeric !== null ? percentageNumeric : { $exists: true },
-            'age.minAge': minAge ? { $lte: parseFloat(minAge) } : { $exists: true },
-            'age.maxAge': maxAge ? { $gte: parseFloat(maxAge) } : { $exists: true },
-            incomeLimit: incomeLimit ? parseFloat(incomeLimit) : { $exists: true },
-            genderEligibility: genderEligibility ? { $regex: new RegExp(genderEligibility, 'i') } : { $exists: true },
+            implementedBy: implementedBy ? { $regex: new RegExp(implementedBy, 'i') } : { $exists: true },
+            percentageOfDisability: percentageOfDisability ? percentageOfDisability : { $exists: true },
+            minAge: minAge ? parseFloat(minAge) : { $exists: true },
+            maxAge: maxAge ? parseFloat(maxAge) : { $exists: true },
+            incomeLimit: incomeLimit ? incomeLimit : { $exists: true },
+            genderEligibility: genderEligibility ? genderEligibility : { $exists: true },
         };
 
-        console.log('Constructed Filter:', filter);
-        const filteredFacilities = await Facility.find(filter);
-        console.log('Filtered Facilities:', filteredFacilities);
-
+        try{
+            const filteredFacilities = await scheme.find(filter);
+            console.log(filteredFacilities)
         res.json(filteredFacilities);
+        }   catch(error){
+            console.log(error)
+        }
+       
+        
     } catch (error) {
         console.error('Error filtering facilities:', error);
         res.status(500).send('Internal Server Error');

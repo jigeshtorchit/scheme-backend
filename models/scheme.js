@@ -26,11 +26,11 @@ const scheme = new mongoose.Schema({
         required: true,
     },
     minAge: {
-        type: Number,
+        type: String,
         required: true,
     },
     maxAge: {
-        type: Number,
+        type: String,
         required: true,
     },
     incomeLimit: {

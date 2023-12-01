@@ -17,7 +17,6 @@ app.use(express.json());
 app.use(cors(corsOption)); 
 app.use('/admin', authRoutes);
 app.use('/scheme', schemeRoutes);
-// app.use(cors());
 app.get('/filterFacilities', async (req, res) => {
   await filterFacilities(req, res);
 });
