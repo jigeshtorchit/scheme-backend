@@ -22,15 +22,14 @@ async function filterFacilities(req, res) {
         const filter = {
             implementedBy: implementedBy ? { $regex: new RegExp(implementedBy, 'i') } : { $exists: true },
             percentageOfDisability: percentageOfDisability ? percentageOfDisability : { $exists: true },
-            minAge: minAge ? parseFloat(minAge) : { $exists: true },
-            maxAge: maxAge ? parseFloat(maxAge) : { $exists: true },
+            minAge: minAge ? minAge : { $exists: true },
+            maxAge: maxAge ? maxAge : { $exists: true },
             incomeLimit: incomeLimit ? incomeLimit : { $exists: true },
             genderEligibility: genderEligibility ? genderEligibility : { $exists: true },
         };
 
         try{
             const filteredFacilities = await scheme.find(filter);
-            console.log(filteredFacilities)
         res.json(filteredFacilities);
         }   catch(error){
             console.log(error)
