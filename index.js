@@ -8,6 +8,7 @@ const corsOption=require("./cors/cors")
 const app = express();
 const PORT = process.env.PORT || 3000;
 const schemeRoutes = require('./routes/schemeRoutes');
+const bodyParser = require('body-parser');
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -15,6 +16,7 @@ app.use('/admin', authRoutes);
 app.use('/scheme', schemeRoutes);
 app.use(cors());
 app.use(cors(corsOption)); 
+app.use(bodyParser.json());
 
 // Check if the connection is not already open before initializing
 if (db.readyState !== 1) {
