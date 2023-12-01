@@ -11,6 +11,12 @@ const schemeRoutes = require('./routes/schemeRoutes');
 const bodyParser = require('body-parser');
 const { filterFacilities } = require('./controllers/filterFacility'); 
 
+app.use((req, res, next) => {
+  console.log('Request headers:', req.headers);
+  console.log('CORS headers:', res.getHeaders());
+  next();
+});
+
 app.use(express.static('public'));
 app.use(express.json());
 app.use(cors(corsOption)); 
