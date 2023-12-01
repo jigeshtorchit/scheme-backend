@@ -5,7 +5,7 @@ const facilitySchema = new mongoose.Schema({
         type: String,
     },
     percentageOfDisability: {
-        type: Number,
+        type: String,
     },
     age: {
         minAge: {

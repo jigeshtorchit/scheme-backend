@@ -112,6 +112,22 @@ exports.schemeView = async (req, res) => {
     }
 };
 
+exports.getSchemeById = async (req, res) => {
+    try {
+      const scheme = await Scheme.findById(req.params.id);
+  
+      if (!scheme) {
+        return res.status(404).send('Scheme not found');
+      }
+  
+      res.status(200).json(scheme);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  };
+
+
 exports.schemeDelete = async (req, res) => {
     try {
         const schemeDeleting = await Scheme.findByIdAndDelete(req.params.id);

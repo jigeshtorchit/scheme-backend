@@ -1,25 +1,43 @@
-const Facility = require('../models/facilityModel'); // Update the path accordingly
+const Facility = require('../models/facilityModel');
+
+const extractNumericValue = (percentage) => {
+    if (percentage) {
+        const match = percentage.match(/\d+/); // Extract numeric digits
+        return match ? parseInt(match[0], 10) : null; // Convert to integer
+    }
+    return null;
+};
 
 async function filterFacilities(req, res) {
     try {
-        // Extract filter parameters from the request query
-        const { implementedBy, percentageOfDisability, minAge, maxAge, incomeLimit, genderEligibility } = req.query;
+        const {
+            implementedBy,
+            percentageOfDisability,
+            minAge,
+            maxAge,
+            incomeLimit,
+            genderEligibility
+        } = req.body;
 
-        // Build the filter object based on provided parameters
+        const percentageNumeric = extractNumericValue(percentageOfDisability);
+        // Log the data in the collection
+        const allFacilities = await Facility.find({});
+        console.log('All Facilities:', allFacilities);
+
+
         const filter = {
-            implementedBy: implementedBy ? { $regex: new RegExp(implementedBy, 'i') } : { $exists: true },
-            percentageOfDisability: percentageOfDisability ? parseFloat(percentageOfDisability) : { $exists: true },
-            'age.minAge': minAge ? parseFloat(minAge) : { $exists: true },
-            'age.maxAge': maxAge ? parseFloat(maxAge) : { $exists: true },
+            implementedBy: { $regex: new RegExp(implementedBy, 'i') },
+            percentageOfDisability: percentageNumeric !== null ? percentageNumeric : { $exists: true },
+            'age.minAge': minAge ? { $lte: parseFloat(minAge) } : { $exists: true },
+            'age.maxAge': maxAge ? { $gte: parseFloat(maxAge) } : { $exists: true },
             incomeLimit: incomeLimit ? parseFloat(incomeLimit) : { $exists: true },
             genderEligibility: genderEligibility ? { $regex: new RegExp(genderEligibility, 'i') } : { $exists: true },
-          };
-          
+        };
 
-        // Find facilities based on the filter
+        console.log('Constructed Filter:', filter);
         const filteredFacilities = await Facility.find(filter);
+        console.log('Filtered Facilities:', filteredFacilities);
 
-        // Return the filtered facilities
         res.json(filteredFacilities);
     } catch (error) {
         console.error('Error filtering facilities:', error);
@@ -27,4 +45,6 @@ async function filterFacilities(req, res) {
     }
 }
 
-module.exports = { filterFacilities };
+module.exports = {
+    filterFacilities
+};
