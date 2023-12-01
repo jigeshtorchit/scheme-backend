@@ -1,8 +1,7 @@
 const corsOptions = {
-  origin: "http://localhost:3000/",
+  origin: "https://schemes-six.vercel.app/",
   methods: 'GET,POST,PATCH,DELETE',
   allowedHeaders: 'Content-Type,Authorization',
 };
 
-  
   module.exports = corsOptions
