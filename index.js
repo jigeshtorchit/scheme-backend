@@ -29,14 +29,14 @@ if (db.readyState !== 1) {
     console.log('Connected to MongoDB');
 
     // Create an admin user if not exists
-    const adminUser = await User.findOne({ email: 'adminawesome@gmail.com' });
+    const adminUser = await User.findOne({ email: 'admin@gmail.com' });
     if (!adminUser) {
       const hashedPassword = await bcrypt.hash('password', 10);
       await User.create({
         firstname: 'Admin',
         lastname: 'Admin',
         username: 'admin',
-        email: 'adminawesome@gmail.com',
+        email: 'admin@gmail.com',
         password: hashedPassword,
       });
     }
