@@ -14,7 +14,23 @@ const schemeValidation = Joi.object({
     genderEligibility: Joi.string().required(),
     attachments: Joi.string().required(),
     comments: Joi.string().required(),
-    emailAddress: Joi.string().required(),
+    emailAddress: Joi.string().email().required(),
+});
+
+const schemeEditValidation = Joi.object({
+    niProvider: Joi.string(),
+    schemeName: Joi.string(),
+    implementedBy: Joi.string(),
+    domainDescription: Joi.string(),
+    eligibleDisabilities: Joi.string(),
+    percentageOfDisability: Joi.string(),
+    minAge: Joi.string(),
+    maxAge: Joi.string(),
+    incomeLimit: Joi.string(),
+    genderEligibility: Joi.string(),
+    attachments: Joi.string(),
+    comments: Joi.string(),
+    emailAddress: Joi.string().email(),
 });
 
 exports.schemeAdd = async (req, res) => {
@@ -71,6 +87,12 @@ exports.schemeAdd = async (req, res) => {
 
 exports.schemeEdit = async (req, res) => {
     try {
+        const { error } = schemeEditValidation.validate(req.body, { abortEarly: false });
+        if (error) {
+            const validationErrors = error.details.map(detail => detail.message);
+            return res.status(400).send(validationErrors);
+        }
+
         const schemeEditing = await Scheme.findByIdAndUpdate(req.params.id, req.body, { new: true });
 
         if (!schemeEditing) {
