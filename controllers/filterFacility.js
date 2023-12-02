@@ -1,13 +1,5 @@
 const scheme = require('../models/scheme');
 
-const extractNumericValue = (percentage) => {
-    if (percentage) {
-        const match = percentage.match(/\d+/); // Extract numeric digits
-        return match ? parseInt(match[0], 10) : null; // Convert to integer
-    }
-    return null;
-};
-
 async function filterFacilities(req, res) {
     try {
         const {
