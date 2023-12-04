@@ -142,7 +142,7 @@ exports.getSchemeById = async (req, res) => {
         return res.status(404).send('Scheme not found');
       }
   
-      res.status(200).json(scheme);
+      res.status(200).send(scheme);
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
