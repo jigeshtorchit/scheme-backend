@@ -22,7 +22,7 @@ async function filterFacilities(req, res) {
 
         try{
             const filteredFacilities = await scheme.find(filter);
-        res.json(filteredFacilities);
+        res.status(200).send(filteredFacilities);
         }   catch(error){
             console.log(error)
         }
