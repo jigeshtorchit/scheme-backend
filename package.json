@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "migrate-up": "migrate-mongo up -f migrate-mongo-config.js",
+    "migrate-down": "migrate-mongo down -f migrate-mongo-config.js"
   },
   "author": "",
   "license": "ISC",
