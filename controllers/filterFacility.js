@@ -25,33 +25,43 @@ async function filterFacilities(req, res) {
         // Calculate the skip value based on the page and limit
         const skip = (parsedPage - 1) * parsedLimit;
 
-
-        const filter = {
-            implementedBy: implementedBy ? { $regex: new RegExp(implementedBy, 'i') } : { $exists: true },
-            disabilityPercentage: disabilityPercentage ? disabilityPercentage : { $exists: true },
-            age: age ? age : { $exists: true },
-            annualIncome: annualIncome ? annualIncome : { $exists: true },
-            genderEligibility: genderEligibility ? genderEligibility : { $exists: true },
-        };
+        // Build the filter object based on the provided criteria
+        const filter = {};
+        if (implementedBy) filter.implementedBy = { $regex: new RegExp(implementedBy, 'i') };
+        if (disabilityPercentage) filter.disabilityPercentage = disabilityPercentage;
+        if (age) filter.age = age;
+        if (annualIncome) filter.annualIncome = annualIncome;
+        if (genderEligibility) filter.genderEligibility = genderEligibility;
 
         try {
+            // Check if filter has any criteria
+            const hasFilterCriteria = Object.keys(filter).length > 0;
+
+            // If there are no filter criteria, return an empty object
+            if (!hasFilterCriteria) {
+                return res.status(200).json({
+                    data: []
+                });
+            }
+
+            // Apply the filter criteria and get the total count
             const totalFilteredFacilities = await scheme.countDocuments(filter);
 
+            // Retrieve the filtered facilities with pagination
             const filteredFacilities = await scheme
                 .find(filter)
                 .skip(skip)
                 .limit(parsedLimit);
-            res.status(200).send({
+
+            res.status(200).json({
                 data: filteredFacilities,
                 totalCount: totalFilteredFacilities,
-                pageSize: parsedLimit,
-                currentPage: parsedPage
+                pageSize: parsedLimit
             });
         } catch (error) {
-            console.log(error)
+            console.log(error);
             res.status(500).json({ error: 'Internal Server Error', message: error.message });
         }
-
 
     } catch (error) {
         console.error('Error filtering facilities:', error);
