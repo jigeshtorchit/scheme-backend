@@ -41,10 +41,11 @@ async function filterFacilities(req, res) {
                 .find(filter)
                 .skip(skip)
                 .limit(parsedLimit);
-            res.status(200).json({
+            res.status(200).send({
                 data: filteredFacilities,
                 totalCount: totalFilteredFacilities,
-                pageSize: parsedLimit
+                pageSize: parsedLimit,
+                currentPage: parsedPage
             });
         } catch (error) {
             console.log(error)
