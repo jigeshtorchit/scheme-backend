@@ -5,8 +5,7 @@ async function filterFacilities(req, res) {
         const {
             implementedBy,
             disabilityPercentage,
-            minAge,
-            maxAge,
+            age,
             annualIncome,
             genderEligibility
         } = req.body;
@@ -30,8 +29,7 @@ async function filterFacilities(req, res) {
         const filter = {
             implementedBy: implementedBy ? { $regex: new RegExp(implementedBy, 'i') } : { $exists: true },
             disabilityPercentage: disabilityPercentage ? disabilityPercentage : { $exists: true },
-            minAge: minAge ? minAge : { $exists: true },
-            maxAge: maxAge ? maxAge : { $exists: true },
+            age: age ? age : { $exists: true },
             annualIncome: annualIncome ? annualIncome : { $exists: true },
             genderEligibility: genderEligibility ? genderEligibility : { $exists: true },
         };

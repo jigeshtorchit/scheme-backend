@@ -25,11 +25,7 @@ const scheme = new mongoose.Schema({
         type: String,
         required: true,
     },
-    minAge: {
-        type: String,
-        required: true,
-    },
-    maxAge: {
+    age: {
         type: String,
         required: true,
     },
