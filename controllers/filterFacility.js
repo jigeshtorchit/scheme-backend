@@ -7,7 +7,7 @@ async function filterFacilities(req, res) {
             percentageOfDisability,
             minAge,
             maxAge,
-            incomeLimit,
+            annualIncome,
             genderEligibility
         } = req.body;
 
@@ -32,7 +32,7 @@ async function filterFacilities(req, res) {
             percentageOfDisability: percentageOfDisability ? percentageOfDisability : { $exists: true },
             minAge: minAge ? minAge : { $exists: true },
             maxAge: maxAge ? maxAge : { $exists: true },
-            incomeLimit: incomeLimit ? incomeLimit : { $exists: true },
+            annualIncome: annualIncome ? annualIncome : { $exists: true },
             genderEligibility: genderEligibility ? genderEligibility : { $exists: true },
         };
 

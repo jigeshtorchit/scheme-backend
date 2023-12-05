@@ -33,7 +33,7 @@ const scheme = new mongoose.Schema({
         type: String,
         required: true,
     },
-    incomeLimit: {
+    annualIncome: {
         type: String,
         required: true,
     },
