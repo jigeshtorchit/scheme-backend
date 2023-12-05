@@ -56,7 +56,8 @@ async function filterFacilities(req, res) {
             res.status(200).json({
                 data: filteredFacilities,
                 totalCount: totalFilteredFacilities,
-                pageSize: parsedLimit
+                pageSize: parsedLimit,
+                currentPage: parsedPage
             });
         } catch (error) {
             console.log(error);
