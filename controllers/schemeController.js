@@ -119,6 +119,7 @@ exports.schemeView = async (req, res) => {
         if (data && data.length > 0) {
             res.status(200).send({
                 data,
+                totalData: totalSchemes,
                 totalPages: totalPages,
                 currentPage: page,
             });
