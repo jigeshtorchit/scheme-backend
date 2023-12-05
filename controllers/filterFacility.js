@@ -34,17 +34,7 @@ async function filterFacilities(req, res) {
         if (genderEligibility) filter.genderEligibility = genderEligibility;
 
         try {
-            // Check if filter has any criteria
-            const hasFilterCriteria = Object.keys(filter).length > 0;
-
-            // If there are no filter criteria, return an empty object
-            if (!hasFilterCriteria) {
-                return res.status(200).json({
-                    data: []
-                });
-            }
-
-            // Apply the filter criteria and get the total count
+                        // Apply the filter criteria and get the total count
             const totalFilteredFacilities = await scheme.countDocuments(filter);
 
             // Retrieve the filtered facilities with pagination
