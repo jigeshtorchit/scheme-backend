@@ -61,6 +61,22 @@ async function filterFacilities(req, res) {
             genderEligibility
         } = req.body;
 
+        // Extract pagination parameters from the URL
+        const page = parseInt(req.query.page) || 1;  // Default page is 1
+        const limit = parseInt(req.query.limit) || 10; // Default limit is 10 items per page
+
+        // Validate and sanitize page and limit parameters
+        const parsedPage = parseInt(page);
+        const parsedLimit = parseInt(limit);
+
+        if (isNaN(parsedPage) || isNaN(parsedLimit) || parsedPage <= 0 || parsedLimit <= 0) {
+            return res.status(400).json({ error: 'Invalid pagination parameters' });
+        }
+
+        // Calculate the skip value based on the page and limit
+        const skip = (parsedPage - 1) * parsedLimit;
+
+
         const filter = {
             implementedBy: implementedBy ? { $regex: new RegExp(implementedBy, 'i') } : { $exists: true },
             percentageOfDisability: percentageOfDisability ? percentageOfDisability : { $exists: true },
@@ -70,15 +86,18 @@ async function filterFacilities(req, res) {
             genderEligibility: genderEligibility ? genderEligibility : { $exists: true },
         };
 
-        try{
-            const filteredFacilities = await scheme.find(filter);
-        res.status(200).send(filteredFacilities);
-        }   catch(error){
+        try {
+            const filteredFacilities = await scheme
+                .find(filter)
+                .skip(skip)
+                .limit(parsedLimit);
+            res.status(200).send(filteredFacilities);
+        } catch (error) {
             console.log(error)
             res.status(500).json({ error: 'Internal Server Error', message: error.message });
         }
-       
-        
+
+
     } catch (error) {
         console.error('Error filtering facilities:', error);
         res.status(500).send('Internal Server Error');
