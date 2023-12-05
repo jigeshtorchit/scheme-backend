@@ -21,7 +21,7 @@ const scheme = new mongoose.Schema({
         type: String,
         required: true,
     },
-    percentageOfDisability: {
+    disabilityPercentage: {
         type: String,
         required: true,
     },
