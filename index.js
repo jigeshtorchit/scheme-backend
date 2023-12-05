@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const schemeRoutes = require('./routes/schemeRoutes');
 const mongoose = require('mongoose');
-const { filterFacilities } = require('./controllers/filterFacility');
+const { filterFacilities  } = require('./controllers/filterFacility');
 const botRoutes = require('./routes/authRoutes');
 const QA = require('./models/bot'); // Import the model for Q&A pairs
 
@@ -21,6 +21,9 @@ app.use('/scheme', schemeRoutes);
 app.post('/filterFacilities', async (req, res) => {
   await filterFacilities(req, res);
 });
+
+// app.get('/facilities', getAllFacilities);
+
 app.use('/api', botRoutes);
 
 app.listen(PORT, () => {
