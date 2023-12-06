@@ -103,25 +103,41 @@ exports.schemeEdit = async (req, res) => {
 };
 
 exports.schemeView = async (req, res) => {
-    const perPage = 10;
-    const page = parseInt(req.query.page) || 1; // Parse the page query parameter or default to 1
-
+    // Extract pagination parameters from the URL
+    const page = parseInt(req.query.page) || 1;  // Default page is 1
+    const limit = parseInt(req.query.limit) || 10; // Default limit is 10 items per page
     try {
+        // Validate and sanitize page and limit parameters
+        const parsedPage = parseInt(page);
+        const parsedLimit = parseInt(limit);
+
+        if (isNaN(parsedPage) || isNaN(parsedLimit) || parsedPage <= 0 || parsedLimit <= 0) {
+            return res.status(400).send('Invalid pagination parameters');
+        }
+
+         // Calculate the skip value based on the page and limit
+         const skip = (parsedPage - 1) * parsedLimit;
+
         const totalSchemes = await Scheme.countDocuments();
-        const totalPages = Math.ceil(totalSchemes / perPage);
+
+         // Adjust pageSize dynamically based on the totalCount
+         const calculatedPageSize = totalSchemes < parsedLimit ? totalSchemes : parsedLimit;
+
+        const totalPages = Math.ceil(totalSchemes / calculatedPageSize);
 
         const data = await Scheme
             .find()
             .sort({ _id: -1 })
-            .skip((page - 1) * perPage)
-            .limit(perPage);
+            .skip(skip)
+            .limit(calculatedPageSize);
 
         if (data && data.length > 0) {
             res.status(200).send({
                 data,
+                pageSize: calculatedPageSize,
                 totalData: totalSchemes,
-                totalPages: totalPages,
-                currentPage: page,
+                currentPage: parsedPage,
+                totalPages: totalPages
             });
         } else {
             res.status(400).send("No Scheme");
