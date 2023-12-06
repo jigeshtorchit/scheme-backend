@@ -12,7 +12,7 @@ async function filterFacilities(req, res) {
 
         // Check if all input data is empty
         if (!implementedBy && !disabilityPercentage && !age && !annualIncome && !genderEligibility) {
-            return res.status(400).json({ error: 'Empty input data. Please provide at least one filter criteria.' });
+            return res.status(400).send({ error: 'Empty input data. Please provide at least one filter criteria.' });
         }
         
         // Extract pagination parameters from the URL
@@ -24,7 +24,7 @@ async function filterFacilities(req, res) {
         const parsedLimit = parseInt(limit);
 
         if (isNaN(parsedPage) || isNaN(parsedLimit) || parsedPage <= 0 || parsedLimit <= 0) {
-            return res.status(400).json({ error: 'Invalid pagination parameters' });
+            return res.status(400).send({ error: 'Invalid pagination parameters' });
         }
 
         // Calculate the skip value based on the page and limit
@@ -46,7 +46,7 @@ async function filterFacilities(req, res) {
                 .find(filter)
                 .skip(skip)
                 .limit(parsedLimit);
-            res.status(200).json({
+            res.status(200).send({
                 data: filteredFacilities,
                 totalCount: totalFilteredFacilities,
                 pageSize: parsedLimit,
@@ -54,7 +54,7 @@ async function filterFacilities(req, res) {
             });
         } catch (error) {
             console.log(error)
-            res.status(500).json({ error: 'Internal Server Error', message: error.message });
+            res.status(500).send({ error: 'Internal Server Error', message: error.message });
         }
 
 
