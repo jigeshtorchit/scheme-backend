@@ -42,14 +42,17 @@ async function filterFacilities(req, res) {
         try {
             const totalFilteredFacilities = await scheme.countDocuments(filter);
 
+               // Adjust pageSize dynamically based on the totalCount
+               const calculatedPageSize = totalFilteredFacilities < parsedLimit ? totalFilteredFacilities : parsedLimit;
+
             const filteredFacilities = await scheme
                 .find(filter)
                 .skip(skip)
-                .limit(parsedLimit);
+                .limit(calculatedPageSize);
             res.status(200).send({
                 data: filteredFacilities,
                 totalCount: totalFilteredFacilities,
-                pageSize: parsedLimit,
+                pageSize: calculatedPageSize,
                 currentPage: parsedPage
             });
         } catch (error) {
