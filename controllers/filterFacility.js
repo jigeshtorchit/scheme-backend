@@ -46,7 +46,7 @@ async function filterFacilities(req, res) {
                 .find(filter)
                 .skip(skip)
                 .limit(parsedLimit);
-            res.status(200).send("Filter data successfully shown:", data = {
+            res.status(200).send({
                 data: filteredFacilities,
                 totalCount: totalFilteredFacilities,
                 pageSize: parsedLimit,
