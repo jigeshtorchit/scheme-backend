@@ -10,6 +10,11 @@ async function filterFacilities(req, res) {
             genderEligibility
         } = req.body;
 
+        // Check if all input data is empty
+        if (!implementedBy && !disabilityPercentage && !age && !annualIncome && !genderEligibility) {
+            return res.status(400).json({ error: 'Empty input data. Please provide at least one filter criteria.' });
+        }
+        
         // Extract pagination parameters from the URL
         const page = parseInt(req.query.page) || 1;  // Default page is 1
         const limit = parseInt(req.query.limit) || 10; // Default limit is 10 items per page
