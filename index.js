@@ -12,7 +12,7 @@ const mongoose = require('mongoose');
 const { filterFacilities  } = require('./controllers/filterFacility');
 const botRoutes = require('./routes/authRoutes');
 const QA = require('./models/bot'); // Import the model for Q&A pairs
-// const verifyToken = require('./middlewares/verifyToken');
+const verifyToken = require('./middlewares/verifyToken');
 const schemeApiRoutes = require('./controllers/schemeApi');
 
 app.use(express.static('public'));
