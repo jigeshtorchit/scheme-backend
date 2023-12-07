@@ -106,17 +106,23 @@ exports.schemeView = async (req, res) => {
     // Extract pagination parameters from the URL
     const page = parseInt(req.query.page) || 1;  // Default page is 1
     const limit = parseInt(req.query.limit) || 10; // Default limit is 10 items per page
+    const previousPage = req.query.previous === 'true'; // Check if previous page is requested
+
     try {
+
+         // Adjust page number based on the previousPage parameter
+         const updatedPage = previousPage ? Math.max(1, page - 1) : page;
+
         // Validate and sanitize page and limit parameters
-        const parsedPage = parseInt(page);
+        const parsedPage = parseInt(updatedPage);
         const parsedLimit = parseInt(limit);
 
         if (isNaN(parsedPage) || isNaN(parsedLimit) || parsedPage <= 0 || parsedLimit <= 0) {
             return res.status(400).send('Invalid pagination parameters');
         }
 
-         // Calculate the skip value based on the page and limit
-         const skip = (parsedPage - 1) * parsedLimit;
+      // Calculate the skip value based on the updatedPage and limit
+      const skip = (parsedPage - 1) * parsedLimit;
 
         const totalSchemes = await Scheme.countDocuments();
 
