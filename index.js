@@ -12,19 +12,27 @@ const mongoose = require('mongoose');
 const { filterFacilities  } = require('./controllers/filterFacility');
 const botRoutes = require('./routes/authRoutes');
 const QA = require('./models/bot'); // Import the model for Q&A pairs
+const verifyToken = require('./middlewares/verifyToken');
+const schemeApiRoutes = require('./controllers/schemeApi');
 
 app.use(express.static('public'));
 app.use(express.json());
 app.use(cors(corsOption));
 app.use('/admin', authRoutes);
-app.use('/scheme', schemeRoutes);
-app.post('/filterFacilities', async (req, res) => {
+app.use('/scheme', verifyToken, schemeRoutes);
+// app.post('/filterFacilities', async (req, res) => {
+//   await filterFacilities(req, res);
+// });
+
+// Apply verifyToken middleware to routes that require authentication
+app.post('/filterFacilities', verifyToken, async (req, res) => {
   await filterFacilities(req, res);
 });
 
 // app.get('/facilities', getAllFacilities);
 
 app.use('/api', botRoutes);
+app.use('/api', schemeApiRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
