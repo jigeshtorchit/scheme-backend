@@ -56,6 +56,12 @@ async function filterFacilities(req, res) {
                 .find(filter)
                 .skip(skip)
                 .limit(calculatedPageSize);
+
+
+            if (filteredFacilities.length === 0) {
+                return res.status(404).send('No valid information found.');
+            }
+
             res.status(200).send({
                 data: filteredFacilities,
                 pageSize: calculatedPageSize,
