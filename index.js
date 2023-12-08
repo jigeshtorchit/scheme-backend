@@ -57,7 +57,6 @@ if (db.readyState !== 1) {
 
     try {
       await QA.insertMany(defaultQAPairs);
-      console.log('Default Q&A pairs inserted successfully.');
     } catch (error) {
       console.error('Error inserting default Q&A pairs:', error);
     }
