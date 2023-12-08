@@ -49,12 +49,10 @@ exports.schemeAdd = async (req, res) => {
         } = req.body;
 
         const { error } = schemeValidation.validate(req.body, { abortEarly: false });
-
         if (error) {
             const validationErrors = error.details.map(detail => detail.message);
             return res.status(400).send(validationErrors);
         }
-
 
         const newScheme = new Scheme({
             niProvider,
@@ -70,10 +68,7 @@ exports.schemeAdd = async (req, res) => {
             comments,
             emailAddress,
         });
-
-        // Use async/await for saving the scheme
         await newScheme.save();
-
         res.status(200).send("Scheme Data Added Successfully");
     } catch (err) {
         console.error(err);
@@ -90,11 +85,9 @@ exports.schemeEdit = async (req, res) => {
         }
 
         const schemeEditing = await Scheme.findByIdAndUpdate(req.params.id, req.body, { new: true });
-
         if (!schemeEditing) {
             return res.status(404).send("No Data");
         }
-
         return res.status(200).send("Scheme details are Updated Successfully");
     } catch (err) {
         console.error(err);
@@ -103,17 +96,11 @@ exports.schemeEdit = async (req, res) => {
 };
 
 exports.schemeView = async (req, res) => {
-    // Extract pagination parameters from the URL
-    const page = parseInt(req.query.page) || 1;  // Default page is 1
-    const limit = parseInt(req.query.limit) || 10; // Default limit is 10 items per page
-    const previousPage = req.query.previous === 'true'; // Check if previous page is requested
-
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const previousPage = req.query.previous === 'true';
     try {
-
-         // Adjust page number based on the previousPage parameter
-         const updatedPage = previousPage ? Math.max(1, page - 1) : page;
-
-        // Validate and sanitize page and limit parameters
+        const updatedPage = previousPage ? Math.max(1, page - 1) : page;
         const parsedPage = parseInt(updatedPage);
         const parsedLimit = parseInt(limit);
 
@@ -121,14 +108,9 @@ exports.schemeView = async (req, res) => {
             return res.status(400).send('Invalid pagination parameters');
         }
 
-      // Calculate the skip value based on the updatedPage and limit
-      const skip = (parsedPage - 1) * parsedLimit;
-
+        const skip = (parsedPage - 1) * parsedLimit;
         const totalSchemes = await Scheme.countDocuments();
-
-         // Adjust pageSize dynamically based on the totalCount
-         const calculatedPageSize = totalSchemes < parsedLimit ? totalSchemes : parsedLimit;
-
+        const calculatedPageSize = totalSchemes < parsedLimit ? totalSchemes : parsedLimit;
         const totalPages = Math.ceil(totalSchemes / calculatedPageSize);
 
         const data = await Scheme
@@ -136,7 +118,6 @@ exports.schemeView = async (req, res) => {
             .sort({ _id: -1 })
             .skip(skip)
             .limit(calculatedPageSize);
-
         if (data && data.length > 0) {
             res.status(200).send({
                 data,
@@ -155,18 +136,16 @@ exports.schemeView = async (req, res) => {
 
 exports.getSchemeById = async (req, res) => {
     try {
-      const scheme = await Scheme.findById(req.params.id);
-  
-      if (!scheme) {
-        return res.status(404).send('Scheme not found');
-      }
-  
-      res.status(200).send(scheme);
+        const scheme = await Scheme.findById(req.params.id);
+        if (!scheme) {
+            return res.status(404).send('Scheme not found');
+        }
+        res.status(200).send(scheme);
     } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error');
+        console.error(error);
+        res.status(500).send('Internal Server Error');
     }
-  };
+};
 
 
 exports.schemeDelete = async (req, res) => {
