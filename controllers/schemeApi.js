@@ -91,6 +91,11 @@ router.post('/categories/result', async (req, res) => {
             annualIncome,
         } = req.body;
 
+         // Check if all input data is empty
+         if (!implementedBy && !disabilityPercentage && !age && !annualIncome && !genderEligibility) {
+            return res.status(400).send("Empty input data. Please provide at least one filter criteria.");
+        }
+
         // Build a filter object based on user input
         const filter = {};
 

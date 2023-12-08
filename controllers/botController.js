@@ -11,7 +11,7 @@ async function chatBot(req, res) {
         // Save the user's question and the chatbot's answer to the database
         // await questionAnswer.create({ question: userQuestion, answer });
 
-        res.status(400).send({ answer });
+        res.status(200).send({ answer });
     } catch (error) {
         console.error('Error answering question:', error);
         res.status(500).send('Internal Server Error');
