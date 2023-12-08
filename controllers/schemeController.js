@@ -4,31 +4,31 @@ const Scheme = require("../models/scheme")
 const schemeValidation = Joi.object({
     niProvider: Joi.string().required(),
     schemeName: Joi.string().required(),
-    implementedBy: Joi.string().required(),
+    implementedBy: Joi.string().regex(/^[^\d]+$/).required(),
     domainDescription: Joi.string().required(),
     eligibleDisabilities: Joi.string().required(),
     disabilityPercentage: Joi.string().required(),
     age: Joi.string().required(),
     annualIncome: Joi.string().required(),
-    genderEligibility: Joi.string().required(),
+    genderEligibility: Joi.string().regex(/^[^\d]+$/).required(),
     attachments: Joi.string().required(),
     comments: Joi.string().required(),
-    emailAddress: Joi.string().email().required(),
+    emailAddress: Joi.string().email().regex(/^[^\s@]+@gmail\.com$/).required(),
 });
 
 const schemeEditValidation = Joi.object({
     niProvider: Joi.string(),
     schemeName: Joi.string(),
-    implementedBy: Joi.string(),
+    implementedBy: Joi.string().regex(/^[^\d]+$/),
     domainDescription: Joi.string(),
     eligibleDisabilities: Joi.string(),
     disabilityPercentage: Joi.string(),
     age: Joi.string(),
     annualIncome: Joi.string(),
-    genderEligibility: Joi.string(),
+    genderEligibility: Joi.string().regex(/^[^\d]+$/),
     attachments: Joi.string(),
     comments: Joi.string(),
-    emailAddress: Joi.string().email(),
+    emailAddress: Joi.string().email().regex(/^[^\s@]+@gmail\.com$/),
 });
 
 exports.schemeAdd = async (req, res) => {
