@@ -1,6 +1,6 @@
 const config = {
   mongodb: {
-    url: "mongodb+srv://admin:govtscheme23nov@govtscheme.f9jqscx.mongodb.net/", 
+    url: "mongodb+srv://jigesh:hJ8CIEDEVJSnYSIG@cluster0.diwl9op.mongodb.net/", 
   },
   migrationsDir: 'migrations',
   changelogCollectionName: 'changelog'
