@@ -9,6 +9,7 @@ const userValidation = Joi.object({
   phone: Joi.number().required()
 });
 
+
 const userUpdateValidation = Joi.object({
     rating: Joi.number(),
     comments: Joi.string(),

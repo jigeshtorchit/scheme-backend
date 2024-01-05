@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const Admin = require('../models/admin');
 const path = require('path');
 
+
 const login = async (req, res) => {
   const { email, password } = req.body;
   try {
